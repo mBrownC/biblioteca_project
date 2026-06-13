@@ -95,3 +95,43 @@ Luego instala el driver e instala:
 pip install psycopg2-binary
 python manage.py migrate
 ```
+
+## Respaldo para alumnos
+
+Si quieres compartir la base con tus alumnos, pero sin usuarios ni prestamos, usa este comando:
+
+```bash
+python manage.py exportar_catalogo
+```
+
+Eso genera este archivo:
+
+```bash
+fixtures/catalogo_alumnos.json
+```
+
+Incluye:
+
+- Genero
+- Autor
+- Tag
+- Editorial
+- Libro
+- Revista
+
+Excluye:
+
+- usuarios.CustomUser
+- biblioteca.Prestamo
+
+Si quieres restaurarlo en otra base:
+
+```bash
+python manage.py loaddata fixtures/catalogo_alumnos.json
+```
+
+Tambien puedes indicar otra ruta de salida:
+
+```bash
+python manage.py exportar_catalogo --output respaldo/catalogo.json
+```

@@ -34,6 +34,7 @@ class Libro(models.Model):
     stock = models.IntegerField(default=1)
     descripcion = models.TextField(blank=True)
     publication_date = models.DateField(null=False)
+    paginas = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.titulo
@@ -60,6 +61,8 @@ class Revista(models.Model):
     disponible = models.BooleanField(default=True)
     notas = models.TextField(blank=True)
     editorial_fk = models.ForeignKey(Editorial, on_delete=models.SET_NULL, null=True, blank=True)
+    paginas = models.IntegerField(null=True, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True, related_name='revistas')
     def __str__(self):
         return self.titulo
 
