@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Confirmar Préstamo{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body p-4 text-center">
+                <h2 class="fw-bold mb-3">Confirmar Préstamo</h2>
+                <p class="fs-5">¿Deseas solicitar el préstamo de:</p>
+                <h4 class="text-dark fw-bold">{{ item.titulo }}</h4>
+                {% if tipo == 'libro' %}
+                <p class="text-muted">{{ item.autor }}</p>
+                {% else %}
+                <p class="text-muted">{{ item.editorial_fk.nombre|default:item.editorial }}</p>
+                {% endif %}
+                <hr>
+                <form method="post" class="d-flex gap-3 justify-content-center">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-dark px-4">Confirmar</button>
+                    <a href="{% url cancel_url item.pk %}" class="btn btn-outline-secondary px-4">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

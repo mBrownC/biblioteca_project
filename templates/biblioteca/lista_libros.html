@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}Catálogo{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-bold">Catálogo</h1>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <form method="get" class="d-flex gap-2">
+            <input type="text" name="q" class="form-control"
+                placeholder="Buscar por título..." value="{{ busqueda }}">
+            <input type="text" name="autor"
+                class="form-control"
+                placeholder="Buscar autor..."
+                value="{{ autor_busq }}">
+
+            <select name="genero" class="form-select">
+
+                <option value>Todos los géneros</option>
+
+                {% for g in generos %}
+
+                <option value="{{ g.id }}">{{ g.nombre }}</option>
+
+                {% endfor %}
+
+            </select>
+
+            <button type="submit" class="btn btn-dark">Buscar</button>
+
+        </form>
+    </div>
+</div>
+
+<h2 class="h4 fw-bold mb-3">Libros</h2>
+<div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+    {% for libro in libros %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">{{ libro.titulo }}</h5>
+                <p class="text-muted mb-1">{{ libro.autor }}</p>
+                {% if libro.genero %}
+                <span class="badge bg-secondary mb-2">{{ libro.genero }}</span>
+                {% endif %}
+                <p class="card-text small text-muted">{{ libro.descripcion|default:"Sin descripción disponible."|truncatewords:20 }}</p>
+            </div>
+            <div
+                class="card-footer d-flex justify-content-between align-items-center">
+                {% if libro.disponible %}
+                <span class="badge bg-success">Disponible ({{ libro.stock }})</span>
+                {% else %}
+                <span class="badge bg-danger">Sin stock</span>
+                {% endif %}
+                <a href="{% url 'detalle_libro' libro.pk %}"
+                    class="btn btn-sm btn-dark">Ver más</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">No se encontraron libros.</div>
+    </div>
+    {% endfor %}
+</div>
+
+<h2 class="h4 fw-bold mb-3">Revistas</h2>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for revista in revistas %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">{{ revista.titulo }}</h5>
+                <p class="text-muted mb-1">
+                    {{ revista.editorial_fk.nombre|default:revista.editorial }}
+                </p>
+                <span class="badge bg-secondary mb-2">Edición {{ revista.numero_edicion }}</span>
+                <p class="card-text small text-muted">
+                    {{ revista.notas|default:"Sin notas disponibles."|truncatewords:20 }}
+                </p>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center">
+                {% if revista.disponible %}
+                <span class="badge bg-success">Disponible</span>
+                {% else %}
+                <span class="badge bg-danger">Prestada</span>
+                {% endif %}
+                <a href="{% url 'detalle_revista' revista.pk %}" class="btn btn-sm btn-dark">Ver más</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">No se encontraron revistas.</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
